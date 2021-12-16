@@ -1,0 +1,178 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup>
+    <Filter Include="Исходные файлы">
+      <UniqueIdentifier>{4FC737F1-C7A5-4376-A066-2A32D752A2FF}</UniqueIdentifier>
+      <Extensions>cpp;c;cc;cxx;c++;cppm;ixx;def;odl;idl;hpj;bat;asm;asmx</Extensions>
+    </Filter>
+    <Filter Include="Файлы заголовков">
+      <UniqueIdentifier>{93995380-89BD-4b04-88EB-625FBE52EBFB}</UniqueIdentifier>
+      <Extensions>h;hh;hpp;hxx;h++;hm;inl;inc;ipp;xsd</Extensions>
+    </Filter>
+    <Filter Include="Файлы ресурсов">
+      <UniqueIdentifier>{67DA6AB6-F800-4c08-8B7A-83BB121AAD01}</UniqueIdentifier>
+      <Extensions>rc;ico;cur;bmp;dlg;rc2;rct;bin;rgs;gif;jpg;jpeg;jpe;resx;tiff;tif;png;wav;mfcribbon-ms</Extensions>
+    </Filter>
+    <Filter Include="Windows">
+      <UniqueIdentifier>{8f05e309-86c8-48b8-9021-5d54eef8e6e9}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Windows\includes">
+      <UniqueIdentifier>{7b5d234e-2048-452e-beb3-4429aaa2389d}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Windows\sources">
+      <UniqueIdentifier>{ee6623aa-7017-4c84-a6b1-6187b9ef07e9}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="ByteInterpreter">
+      <UniqueIdentifier>{01b36b34-3972-4d12-955d-71bb26e635a8}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="ByteInterpreter\includes">
+      <UniqueIdentifier>{1a1d728c-bc30-41c4-b1ea-fd470c74397d}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="ByteInterpreter\sources">
+      <UniqueIdentifier>{da00692c-046d-4f23-9c39-5f42c1b6e4db}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Debug">
+      <UniqueIdentifier>{41f405c4-dcd1-47e2-9d7d-ba826d8e69a7}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Exports">
+      <UniqueIdentifier>{fb031304-d0fd-4a63-8077-c655a57413b8}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="AkelPad">
+      <UniqueIdentifier>{79a331f0-1055-468a-b5c1-3605b2cdbbb0}</UniqueIdentifier>
+    </Filter>
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="framework.h">
+      <Filter>Файлы заголовков</Filter>
+    </ClInclude>
+    <ClInclude Include="pch.h">
+      <Filter>Файлы заголовков</Filter>
+    </ClInclude>
+    <ClInclude Include="PluginManager.h">
+      <Filter>AkelPad</Filter>
+    </ClInclude>
+    <ClInclude Include="AkelDLL.h">
+      <Filter>AkelPad</Filter>
+    </ClInclude>
+    <ClInclude Include="AkelEdit.h">
+      <Filter>AkelPad</Filter>
+    </ClInclude>
+    <ClInclude Include="Debug.h">
+      <Filter>Debug</Filter>
+    </ClInclude>
+    <ClInclude Include="resource.h">
+      <Filter>Файлы заголовков</Filter>
+    </ClInclude>
+    <ClInclude Include="ControlManager.h">
+      <Filter>Windows\includes</Filter>
+    </ClInclude>
+    <ClInclude Include="PluginDialog.h">
+      <Filter>Windows\includes</Filter>
+    </ClInclude>
+    <ClInclude Include="Window.h">
+      <Filter>Windows\includes</Filter>
+    </ClInclude>
+    <ClInclude Include="WindowData.h">
+      <Filter>Windows\includes</Filter>
+    </ClInclude>
+    <ClInclude Include="control_constants.h">
+      <Filter>Windows</Filter>
+    </ClInclude>
+    <ClInclude Include="PopupTreeView.h">
+      <Filter>Windows\includes</Filter>
+    </ClInclude>
+    <ClInclude Include="ComboBoxTree.h">
+      <Filter>Windows\includes</Filter>
+    </ClInclude>
+    <ClInclude Include="ControlEx.h">
+      <Filter>Windows\includes</Filter>
+    </ClInclude>
+    <ClInclude Include="ByteTokenizer.h">
+      <Filter>ByteInterpreter\includes</Filter>
+    </ClInclude>
+    <ClInclude Include="exports.h">
+      <Filter>Exports</Filter>
+    </ClInclude>
+    <ClInclude Include="m3x3_functions.h">
+      <Filter>ByteInterpreter</Filter>
+    </ClInclude>
+    <ClInclude Include="Converter.h">
+      <Filter>Windows\includes</Filter>
+    </ClInclude>
+    <ClInclude Include="ColorConverter.h">
+      <Filter>ByteInterpreter\includes</Filter>
+    </ClInclude>
+    <ClInclude Include="ByteInterpreter.h">
+      <Filter>ByteInterpreter\includes</Filter>
+    </ClInclude>
+    <ClInclude Include="ConversionMethods.h">
+      <Filter>ByteInterpreter\includes</Filter>
+    </ClInclude>
+    <ClInclude Include="Subsampling.h">
+      <Filter>ByteInterpreter\includes</Filter>
+    </ClInclude>
+    <ClInclude Include="Tokenizer.h">
+      <Filter>ByteInterpreter\includes</Filter>
+    </ClInclude>
+    <ClInclude Include="ConversionData.h">
+      <Filter>ByteInterpreter\includes</Filter>
+    </ClInclude>
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="pch.cpp">
+      <Filter>Исходные файлы</Filter>
+    </ClCompile>
+    <ClCompile Include="PluginDialog.cpp">
+      <Filter>Windows\sources</Filter>
+    </ClCompile>
+    <ClCompile Include="Window.cpp">
+      <Filter>Windows\sources</Filter>
+    </ClCompile>
+    <ClCompile Include="PopupTreeView.cpp">
+      <Filter>Windows\sources</Filter>
+    </ClCompile>
+    <ClCompile Include="ComboBoxTree.cpp">
+      <Filter>Windows\sources</Filter>
+    </ClCompile>
+    <ClCompile Include="Debug.cpp">
+      <Filter>Debug</Filter>
+    </ClCompile>
+    <ClCompile Include="ByteTokenizer.cpp">
+      <Filter>ByteInterpreter\sources</Filter>
+    </ClCompile>
+    <ClCompile Include="exports.cpp">
+      <Filter>Exports</Filter>
+    </ClCompile>
+    <ClCompile Include="dllmain.cpp">
+      <Filter>Exports</Filter>
+    </ClCompile>
+    <ClCompile Include="Converter.cpp">
+      <Filter>Windows\sources</Filter>
+    </ClCompile>
+    <ClCompile Include="ColorConverter.cpp">
+      <Filter>ByteInterpreter\sources</Filter>
+    </ClCompile>
+    <ClCompile Include="ConversionMethods.cpp">
+      <Filter>ByteInterpreter\sources</Filter>
+    </ClCompile>
+    <ClCompile Include="ByteInterpreter.cpp">
+      <Filter>ByteInterpreter\sources</Filter>
+    </ClCompile>
+    <ClCompile Include="Subsampling.cpp">
+      <Filter>ByteInterpreter\sources</Filter>
+    </ClCompile>
+    <ClCompile Include="Tokenizer.cpp">
+      <Filter>ByteInterpreter\sources</Filter>
+    </ClCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <ResourceCompile Include="ByteInterpreter.rc">
+      <Filter>Файлы ресурсов</Filter>
+    </ResourceCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="PluginDialog_Menu.inl">
+      <Filter>Windows\sources</Filter>
+    </None>
+  </ItemGroup>
+</Project>

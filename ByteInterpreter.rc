@@ -1,0 +1,176 @@
+// Microsoft Visual C++ generated resource script.
+//
+#include "resource.h"
+
+#define APSTUDIO_READONLY_SYMBOLS
+/////////////////////////////////////////////////////////////////////////////
+//
+// Generated from the TEXTINCLUDE 2 resource.
+//
+#include "winres.h"
+
+/////////////////////////////////////////////////////////////////////////////
+#undef APSTUDIO_READONLY_SYMBOLS
+
+/////////////////////////////////////////////////////////////////////////////
+// Русский (Россия) resources
+
+#if !defined(AFX_RESOURCE_DLL) || defined(AFX_TARG_RUS)
+LANGUAGE LANG_RUSSIAN, SUBLANG_DEFAULT
+#pragma code_page(1251)
+
+#ifdef APSTUDIO_INVOKED
+/////////////////////////////////////////////////////////////////////////////
+//
+// TEXTINCLUDE
+//
+
+1 TEXTINCLUDE 
+BEGIN
+    "resource.h\0"
+END
+
+2 TEXTINCLUDE 
+BEGIN
+    "#include ""winres.h""\r\n"
+    "\0"
+END
+
+3 TEXTINCLUDE 
+BEGIN
+    "\r\n"
+    "\0"
+END
+
+#endif    // APSTUDIO_INVOKED
+
+
+/////////////////////////////////////////////////////////////////////////////
+//
+// Menu
+//
+
+IDR_PLUGIN_MENU MENU
+BEGIN
+    POPUP "Файл"
+    BEGIN
+        MENUITEM "Сохранить...\tCtrl+S",        IDM_SAVE
+    END
+    POPUP "Анализ"
+    BEGIN
+        MENUITEM "Итератор типа данных\tCtrl±", IDM_NEXT_DATA_TYPE
+        MENUITEM "Итератор цвета\tSpace±",      IDM_NEXT_COLOR_ENCODING
+        MENUITEM "Итератор отображения цвета\tShift±", IDM_NEXT_VIEWMODE
+        MENUITEM SEPARATOR
+        POPUP "Render"
+        BEGIN
+            MENUITEM "Image\t Ctrl+Shift+I",        IDM_RENDER2IMAGE
+            MENUITEM SEPARATOR
+            MENUITEM "OpenGL\tCtrl+Shift+O",        IDM_RUN_OPENGL
+            MENUITEM "DirectX\tCtrl+Shift+D",       IDM_RUN_DIRECTX, INACTIVE
+        END
+    END
+    POPUP "Опции"
+    BEGIN
+        MENUITEM "Инвертировать порядок байт\tCtrl+I", IDM_BYTE_ORDER, CHECKED
+        MENUITEM "Автоподбор размера изображения\tCtrl+A", IDM_AUTO_IMG_SIZE, CHECKED
+        MENUITEM "Сбрасывать Offset при получении данных", IDM_RESET_OFFSET, CHECKED
+        MENUITEM SEPARATOR
+        POPUP "Цветовые пространства"
+        BEGIN
+            POPUP "RGB"
+            BEGIN
+                POPUP "Формат RGB"
+                BEGIN
+                    MENUITEM "RGB888\t24 bpp",              IDM_BPP_RGB888, CHECKED
+                    MENUITEM "RGB565\t16 bpp",              IDM_BPP_RGB565
+                    MENUITEM "RGB555\t15 bpp",              IDM_BPP_RGB555
+                    MENUITEM "RGB444\t12 bpp",              IDM_BPP_RGB444
+                END
+                MENUITEM SEPARATOR
+                MENUITEM "Исп. ARGB вместо RGBA",       IDM_USE_ARGB
+            END
+            POPUP "CIE XYZ"
+            BEGIN
+                POPUP "Опорный угол"
+                BEGIN
+                    MENUITEM "2°\tCIE 1931",                IDM_OBSERVER_2, CHECKED
+                    MENUITEM "10°\tCIE 1964",               IDM_OBSERVER_10
+                END
+                POPUP "Освещение"
+                BEGIN
+                    MENUITEM "A\tIncandescent (Tungsten)",  IDM_ILLUMINANT_A
+                    MENUITEM "B\tOld direct sunlight at noon", IDM_ILLUMINANT_B
+                    MENUITEM "C\tOld daylight",             IDM_ILLUMINANT_C
+                    MENUITEM "D50\tICC profile PCS",        IDM_ILLUMINANT_D50
+                    MENUITEM "D55\tMid-morning daylight",   IDM_ILLUMINANT_D55
+                    MENUITEM "D65\tDaylight (sRGB, Adobe-RGB)", IDM_ILLUMINANT_D65, CHECKED
+                    MENUITEM "D75\tNorth sky daylight",     IDM_ILLUMINANT_D75
+                    MENUITEM "E\tEqual energy",             IDM_ILLUMINANT_E
+                    MENUITEM "F1\tDaylight Fluorescent",    IDM_ILLUMINANT_F1
+                    MENUITEM "F2\tCool fluorescent",        IDM_ILLUMINANT_F2
+                    MENUITEM "F3\tWhite Fluorescent",       IDM_ILLUMINANT_F3
+                    MENUITEM "F4\tWarm White Fluorescent",  IDM_ILLUMINANT_F4
+                    MENUITEM "F5\tDaylight Fluorescent",    IDM_ILLUMINANT_F5
+                    MENUITEM "F6\tLite White Fluorescent",  IDM_ILLUMINANT_F6
+                    MENUITEM "F7\tDaylight fluorescent (D65 simulator)", IDM_ILLUMINANT_F7
+                    MENUITEM "F8\tSylvania F40 (D50 simulator)", IDM_ILLUMINANT_F8
+                    MENUITEM "F9\tCool White Fluorescent",  IDM_ILLUMINANT_F9
+                    MENUITEM "F10\tUltralume 50 (Philips TL85)", IDM_ILLUMINANT_F10
+                    MENUITEM "F11\tUltralume 40 (Philips TL84)", IDM_ILLUMINANT_F11
+                    MENUITEM "F12\tUltralume 30 (Philips TL83)", IDM_ILLUMINANT_F12
+                END
+            END
+            POPUP "CIE LCH"
+            BEGIN
+                MENUITEM "LCH (ab)",                    IDM_USE_LCH_AB, CHECKED
+                MENUITEM "LCH (uv)",                    IDM_USE_LCH_UV
+            END
+            POPUP "YUV"
+            BEGIN
+                POPUP "Семплирование"
+                BEGIN
+                    MENUITEM "4:4:4\t3 bytes per 1 px",     IDM_USE_YUV444, CHECKED
+                    MENUITEM "4:2:2\t4 bytes per 2 px",     IDM_USE_YUV422
+                    MENUITEM "4:1:1\t6 bytes per 4 px",     IDM_USE_YUV411
+                    MENUITEM "4:2:0 (YV12)\t6 bytes per 4 px", IDM_USE_YV12
+                    MENUITEM "4:2:0 (NV21)\t3 bytes per 1 px", IDM_USE_NV21
+                END
+                MENUITEM "Матрица трансформации...",    IDM_SET_YUV_MATRIX
+            END
+        END
+        POPUP "Бит на пискель"
+        BEGIN
+            MENUITEM "По умолчанию",                IDM_BPP_DEFAULT, CHECKED
+            MENUITEM "Floats\t96 bpp",              IDM_BPP_FLOATS
+        END
+        POPUP "Цвета отображать как"
+        BEGIN
+            MENUITEM "#HEX",                        IDM_SHOW_AS_HEX
+            MENUITEM "[0..255]",                    IDM_SHOW_AS_INT
+            MENUITEM "[0.0..1.0]",                  IDM_SHOW_AS_REAL
+            MENUITEM "Задано цветовой моделью",     IDM_SHOW_DEFAULT, CHECKED
+            MENUITEM SEPARATOR
+            MENUITEM "Отображать как RGB\tCtrl+R",  IDM_SHOW_AS_RGB
+        END
+        MENUITEM "Установить цвет фона...\tCtrl+B", IDM_BACKGROUND_COLOR
+        MENUITEM SEPARATOR
+        MENUITEM "Всегда отображать окно\tCtrl+L", IDM_SHOW_ALWAYS
+    END
+END
+
+#endif    // Русский (Россия) resources
+/////////////////////////////////////////////////////////////////////////////
+
+
+
+#ifndef APSTUDIO_INVOKED
+/////////////////////////////////////////////////////////////////////////////
+//
+// Generated from the TEXTINCLUDE 3 resource.
+//
+
+
+/////////////////////////////////////////////////////////////////////////////
+#endif    // not APSTUDIO_INVOKED
+
