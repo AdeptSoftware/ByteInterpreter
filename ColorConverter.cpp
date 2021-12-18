@@ -355,6 +355,18 @@ void CColorConverter::CMYK2RGB(SRGB& out, const CMYK& in) {
 // ========= ========= ========= ========= ========= ========= ========= ========= [!]
 // https://en.wikipedia.org/wiki/YUV + ей подобные и стандарты BT (Rec.)					    
 
+void CColorConverter::YUV_GetTransformMatrix(double* m3x3, BOOL b2RGB) {
+	memcpy_s(m3x3, MATSIZE, b2RGB ? m_TransformMatrixYUVtoRGB : m_TransformMatrixRGBtoYUV, MATSIZE);
+}
+
+void CColorConverter::YUV_GetConversionData(double* W5, BT_STANDARD standard) {
+	size_t sz = sizeof(double)*5;
+	if (standard != BT_STANDARD::CUSTOM)
+		memcpy_s(W5, sz, YUV_ConversionData[e_cast(standard)], sz);
+	else
+		ZeroMemory(W5, sz);
+}
+
 void CColorConverter::YUV_CreateTransformMatrix(const double W[5]) {
 	double M[3][3] = {
 		{ 1.0, 0.0,							  (1.0-W[0])/W[4]				},
@@ -367,6 +379,9 @@ void CColorConverter::YUV_CreateTransformMatrix(const double W[5]) {
 }
 
 void CColorConverter::YUV_RotateTransformMatrix(const double deg) {
+	if (deg == 0.0)
+		return;
+
 	double radians = deg*((2*PI)/360.0);
 	double ksin	   = sin(radians);
 	double kcos    = cos(radians);

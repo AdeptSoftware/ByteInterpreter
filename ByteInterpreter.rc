@@ -56,20 +56,6 @@ BEGIN
     BEGIN
         MENUITEM "Сохранить...\tCtrl+S",        IDM_SAVE
     END
-    POPUP "Анализ"
-    BEGIN
-        MENUITEM "Итератор типа данных\tCtrl±", IDM_NEXT_DATA_TYPE
-        MENUITEM "Итератор цвета\tSpace±",      IDM_NEXT_COLOR_ENCODING
-        MENUITEM "Итератор отображения цвета\tShift±", IDM_NEXT_VIEWMODE
-        MENUITEM SEPARATOR
-        POPUP "Render"
-        BEGIN
-            MENUITEM "Image\t Ctrl+Shift+I",        IDM_RENDER2IMAGE
-            MENUITEM SEPARATOR
-            MENUITEM "OpenGL\tCtrl+Shift+O",        IDM_RUN_OPENGL
-            MENUITEM "DirectX\tCtrl+Shift+D",       IDM_RUN_DIRECTX, INACTIVE
-        END
-    END
     POPUP "Опции"
     BEGIN
         MENUITEM "Инвертировать порядок байт\tCtrl+I", IDM_BYTE_ORDER, CHECKED
@@ -136,7 +122,7 @@ BEGIN
                     MENUITEM "4:2:0 (YV12)\t6 bytes per 4 px", IDM_USE_YV12
                     MENUITEM "4:2:0 (NV21)\t3 bytes per 1 px", IDM_USE_NV21
                 END
-                MENUITEM "Матрица трансформации...",    IDM_SET_YUV_MATRIX
+                MENUITEM "Матрица трансформации...\tCtrl+M", IDM_SET_YUV_MATRIX
             END
         END
         POPUP "Бит на пискель"
@@ -153,9 +139,23 @@ BEGIN
             MENUITEM SEPARATOR
             MENUITEM "Отображать как RGB\tCtrl+R",  IDM_SHOW_AS_RGB
         END
-        MENUITEM "Установить цвет фона...\tCtrl+B", IDM_BACKGROUND_COLOR
+        MENUITEM "Установить цвет фона...\tCtrl+T", IDM_SET_BKG_COLOR
         MENUITEM SEPARATOR
         MENUITEM "Всегда отображать окно\tCtrl+L", IDM_SHOW_ALWAYS
+    END
+    POPUP "Анализ"
+    BEGIN
+        MENUITEM "Итератор типа данных\tCtrl±", IDM_NEXT_DATA_TYPE
+        MENUITEM "Итератор цвета\tSpace±",      IDM_NEXT_COLOR_ENCODING
+        MENUITEM "Итератор отображения цвета\tShift±", IDM_NEXT_VIEWMODE
+        MENUITEM SEPARATOR
+        POPUP "Render"
+        BEGIN
+            MENUITEM "Image\t Ctrl+Shift+I",        IDM_RENDER2IMAGE
+            MENUITEM SEPARATOR
+            MENUITEM "OpenGL\tCtrl+Shift+O",        IDM_RUN_OPENGL
+            MENUITEM "DirectX\tCtrl+Shift+D",       IDM_RUN_DIRECTX, INACTIVE
+        END
     END
 END
 

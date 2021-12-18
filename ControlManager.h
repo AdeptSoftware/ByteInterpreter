@@ -5,14 +5,14 @@
 
 class CControlManager {
 	const WINDOW_DATA* m_pData;
-	HFONT*			   m_hFont;
+	HFONT*			   m_hFontPtr;
 	BOOL			   m_bFailed;
 	UINT			   m_uFirstID;
 
 	std::vector<HWND>  m_list;
 public:
-	CControlManager(const WINDOW_DATA* pData, UINT uFirstID, HFONT* hFont = nullptr)
-		: m_pData(pData), m_uFirstID(uFirstID), m_bFailed(FALSE), m_hFont(hFont) {}
+	CControlManager(const WINDOW_DATA* pData, UINT uFirstID, HFONT* hFontPtr = nullptr)
+		: m_pData(pData), m_uFirstID(uFirstID), m_bFailed(FALSE), m_hFontPtr(hFontPtr) {}
 	
 	~CControlManager() {
 		m_list.clear();
@@ -21,8 +21,8 @@ public:
 	void Append(HWND hWnd, WNDPROC lpfnWndProc = nullptr) {
 		if (hWnd) {
 			m_list.push_back(hWnd);
-			if (*m_hFont)
-				::SendMessage(hWnd, WM_SETFONT, reinterpret_cast<WPARAM>(*m_hFont), NULL);
+			if (*m_hFontPtr)
+				::SendMessage(hWnd, WM_SETFONT, reinterpret_cast<WPARAM>(*m_hFontPtr), NULL);
 			if (lpfnWndProc)
 				SetWindowLong(hWnd, GWLP_WNDPROC, reinterpret_cast<LONG>(lpfnWndProc));
 		}
@@ -30,14 +30,15 @@ public:
 			m_bFailed = TRUE;
 	}
 
-	void Create(int x, int y, int w, int h, LPCWSTR lpszClassName, DWORD dwStyle, 
+	BOOL Create(int x, int y, int w, int h, LPCWSTR lpszClassName, DWORD dwStyle, 
 		        LPCWSTR lpszText = L"", WNDPROC lpfnWndProc = nullptr) {
 		if (!m_bFailed) {
 			HMENU hID = reinterpret_cast<HMENU>(m_uFirstID+m_list.size());
 			HWND hWnd = ::CreateWindow(lpszClassName, lpszText, dwStyle, x, y, w, h,
 									   m_pData->hWnd, hID, m_pData->hInst, nullptr);
-			Append(hWnd, lpfnWndProc);
+			Append(hWnd, lpfnWndProc); // m_bFailed - здесь может обновиться
 		}
+		return !m_bFailed;
 	}
 
 	// Если uLast == 0		=> перебираем все элементы. Кроме того, uStart должно быть < uLast!
@@ -63,6 +64,10 @@ public:
 		return m_list.size();
 	}
 
+	HFONT GetFont() const {
+		return *m_hFontPtr;
+	}
+
 	BOOL IsOK() const {
 		return !m_bFailed;
 	}
@@ -77,9 +82,10 @@ public:
 		return TRUE;
 	}
 
-	void FillNumberEdit(UINT uID, int nValue) {
-		wchar_t buf[64]{ 0 };
-		_itow_s(nValue, buf, 10);
+	template <typename T>
+	void FillNumberEdit(UINT uID, LPCWSTR fmt, T value) {
+		wchar_t buf[512]{ 0 };
+		swprintf_s(buf, fmt, value);
 		SetWindowTextW(m_list[uID-m_uFirstID], buf);
 	}
 };

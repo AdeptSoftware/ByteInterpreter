@@ -4,6 +4,9 @@
 #include "ConversionMethods.h"
 
 namespace ByteInterpreter {
+	// https://russianblogs.com/article/4816448935/
+	// https://docs.microsoft.com/en-us/windows/win32/medfound/recommended-8-bit-yuv-formats-for-video-rendering
+	// https://en.wikipedia.org/wiki/YUV
 
 	enum class DataType  : int { INT64 = 0, INT32, INT16, INT8, HEX, OCT, BIN, FLOAT, DOUBLE, COLOR, UNICODEBYTES };
 	enum class ColorList : int { RGB, RGBA, GrayScale, CMYK, CMY, HSV, HSL, HSLA, HSI, HWB, XYZ, LAB, xyY, LUV, LCH_AB, LCH_UV, LMS, HLAB, YUV, YCbCr, YIQ, YDbDr, YCoCg };

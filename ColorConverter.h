@@ -13,11 +13,17 @@ namespace ByteInterpreter {
 	enum class XYZ_OBSERVER : int { CIE1931_2, CIE1964_10 };
 	// Стандартный источник света
 	enum class XYZ_ILLUMINANT : int { A, B, C, D50, D55, D65, D75, E, F1, F2, F3, F4, F5, F6, F7, F8, F9, F10, F11, F12 };
-
-namespace Colors {
 	// Метод хроматической адаптации
 	enum class XYZ_METHOD : int { LINEAR, BRADFORD, VON_KRIES };
 	enum class LMS_CONVERSION : int { LMS2XYZ_D65_2, LMS2XYZ_E_2, LMS2XYZ_F_2, CAT97S_LINEAR, CAT97S_BRADFORD, CAT02, XYB_JPEG_XL };
+
+	// ========= ========= ========= ========= ========= ========= ========= =========
+
+	// SDTV использует BT.470 и BT.601; HDTV - BT.709; UHDTV - BT.2020 || HDR-TV - BT.2100
+	// BT.2020 и BT.2100 используют одну и ту же цветовую гамму (вместо BT.2020 можно использовать BT.2100)
+	enum class BT_STANDARD : int { CUSTOM = -1, BT470 = 0, BT601, BT709, BT2100 };
+
+namespace Colors {
 
 	struct _REFERENCE_WHITE_COMPONENTS {
 		// Параметры
@@ -69,11 +75,6 @@ namespace Colors {
 	// Значения	LMS в диапазоне зависят от используемой LMS_CONVERSION...
 	IMPLEMENT_COLOR_RW(LMS, L, M, S);
 
-// ========= ========= ========= ========= ========= ========= ========= =========
-
-// SDTV использует BT.470 и BT.601; HDTV - BT.709; UHDTV - BT.2020 || HDR-TV - BT.2100
-// BT.2020 и BT.2100 используют одну и ту же цветовую гамму (вместо BT.2020 можно использовать BT.2100)
-enum class BT_STANDARD : int { CUSTOM = -1, BT470 = 0, BT601, BT709, BT2100 };
 
 // ========= ========= ========= ========= ========= ========= ========= =========
 
@@ -171,6 +172,8 @@ public:
 	// ========= ========= ========= ========= ========= ========= ========= =========
 
 	void YUV_UseBTStandard(BT_STANDARD bt);
+	void YUV_GetTransformMatrix(double* m3x3, BOOL b2RGB);
+	static void YUV_GetConversionData(double* W5, BT_STANDARD standard);
 
 	// W: Wr, Wb - константы (?эталонного цвета?); Umax и Vmax - макс. значение цветоразностных компонентов
 	// YDbDr (SECAM): W { 0.299, 0.587, 0.114, 1.333, -1.333 }; -> Y = [0.0..1.0]; Dr, Db = [+/-1.333]

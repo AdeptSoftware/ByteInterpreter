@@ -1,9 +1,8 @@
 #pragma once
-#include "Window.h"
 #include "exports.h"
-#include "ComboBoxTree.h"
-#include "ControlManager.h"
 #include "Converter.h"
+#include "ComboBoxTree.h"
+#include "SettingDialog.h"
 
 
 class CPluginDialog : public CWnd, IPluginDialog {
@@ -13,7 +12,7 @@ public:
 	~CPluginDialog();
 
 	virtual BOOL WndProc(HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM lParam);
-	void OnPaint(HDC hDC, RECT& rc);
+	virtual void OnPaint(HDC hDC, RECT& rc);
 
 	// bytes - должны быть динамически выделены!
 	void SetBytes(BYTE* bytes, ULONG length, BOOL bIsWideChar = TRUE);
@@ -25,16 +24,19 @@ private:
 	BOOL CreateControls();
 	// w, h - ширина и высота окна!
 	void OnSizing(int w, int h);
-	void OnChangeValue(UINT uCtrlID, UINT uValue);
 	void OnCommand(LPARAM lParam, UINT uCtrlID, UINT uNotify, void* pData = nullptr);
 	void OnMenuCommand(UINT uID, BOOL arg = TRUE);
 	void OnKeyDown(WPARAM code, LPARAM cnt);
+
+	void OnChangeValue(UINT uCtrlID, UINT uValue);
+	void OnUpdateSettings(COLOR_CONVERTER_SETTINGS* pCSS);
 
 	void ShowDataControls();
 	void ShowColorControls();
 
 private:
 	BI::OPTIONS		m_bi;
+	CSettingDialog	m_settings;
 	CConverter		m_converter;
 
 	CWndRegistrator m_wrPluginDialog;

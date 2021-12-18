@@ -23,7 +23,8 @@ public:
 	CWnd();
 	~CWnd();
 
-	virtual BOOL WndProc(HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM lParam) = 0;
+	virtual BOOL  WndProc(HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM lParam) = 0;
+	virtual void  OnPaint(HDC hDC, RECT& rc) = 0;
 	static  CWnd* FindWnd(HWND hWnd);
 };
 
@@ -33,6 +34,6 @@ class CWndRegistrator {
 	HINSTANCE m_hInst;
 public:
 	CWndRegistrator(const WNDCLASS& wc);
-	CWndRegistrator(WNDPROC lpfnWndProc, LPCWSTR lpszClassName, int cbWndExtra = 0);
+	CWndRegistrator(LPCWSTR lpszClassName, int cbWndExtra = 0);
 	~CWndRegistrator();
 };

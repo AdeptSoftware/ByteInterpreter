@@ -5,6 +5,29 @@
 // Карта созданных окон
 static std::vector<CWnd*> g_wndMap; 
 
+// ========= ========= ========= ========= ========= ========= ========= =========
+
+LRESULT CALLBACK WndProc(HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM lParam) {
+	CWnd* pWnd = CWnd::FindWnd(hWnd);
+	if (pWnd) {
+		if (uMsg == WM_PAINT) {
+			RECT rcWindow;
+			PAINTSTRUCT ps;
+			GetClientRect(hWnd, &rcWindow);
+			HDC hDC = BeginPaint(hWnd, &ps);
+			pWnd->OnPaint(hDC, rcWindow);
+			EndPaint(hWnd, &ps);
+		}
+		else if (uMsg >= WM_CTLCOLORMSGBOX && uMsg <= WM_CTLCOLORSTATIC)
+			return reinterpret_cast<LRESULT>(GetStockObject(WHITE_BRUSH));
+		else if (!pWnd->WndProc(hWnd, uMsg, wParam, lParam))
+			return 0;
+	}
+	return DefWindowProc(hWnd, uMsg, wParam, lParam);
+}
+
+// ========= ========= ========= ========= ========= ========= ========= =========
+
 CWnd::CWnd() {
 	g_wndMap.push_back(this);
 } 
@@ -69,7 +92,7 @@ CWndRegistrator::CWndRegistrator(const WNDCLASS& wc) {
 	RegisterClass(&wc);
 }
 
-CWndRegistrator::CWndRegistrator(WNDPROC lpfnWndProc, LPCWSTR lpszClassName, int cbWndExtra) {
+CWndRegistrator::CWndRegistrator(LPCWSTR lpszClassName, int cbWndExtra) {
 	m_lpszClassName  = lpszClassName;
 	m_hInst			 = GetModuleHandle(nullptr);
 
@@ -78,7 +101,7 @@ CWndRegistrator::CWndRegistrator(WNDPROC lpfnWndProc, LPCWSTR lpszClassName, int
 	wc.cbClsExtra	 = 0;
 	wc.hIcon		 = nullptr;
 	wc.lpszMenuName  = nullptr; 
-	wc.lpfnWndProc	 = lpfnWndProc;
+	wc.lpfnWndProc	 = WndProc;
 	wc.cbWndExtra	 = cbWndExtra;
 	wc.hInstance	 = m_hInst;
 	wc.hCursor		 = LoadCursor(nullptr, IDC_ARROW);

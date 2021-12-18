@@ -38,7 +38,6 @@
 #define ID_40039                        40039
 #define ID_40040                        40040
 #define ID_40041                        40041
-#define IDM_BACKGROUND_COLOR            40042
 #define ID_40043                        40043
 #define ID_40044                        40044
 #define ID_RGB_ARGB                     40045
@@ -94,7 +93,7 @@
 #define IDM_USE_LCH_AB                  40115
 #define IDM_USE_LCH_UV                  40116
 #define IDM_SET_YUV_MATRIX              40117
-#define IDM_YUV444                      40118
+#define IDM_SET_BKG_COLOR				40118
 #define IDM_USE_YUV444                  40119
 #define IDM_USE_YUV422                  40120
 #define IDM_USE_YUV411                  40121
@@ -108,7 +107,7 @@
 // 
 #ifdef APSTUDIO_INVOKED
 #ifndef APSTUDIO_READONLY_SYMBOLS
-#define _APS_NEXT_RESOURCE_VALUE        102
+#define _APS_NEXT_RESOURCE_VALUE        104
 #define _APS_NEXT_COMMAND_VALUE         40130
 #define _APS_NEXT_CONTROL_VALUE         1001
 #define _APS_NEXT_SYMED_VALUE           101

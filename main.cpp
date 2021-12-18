@@ -103,7 +103,7 @@ void LoadFile(LPCWSTR lpszFileName);
 void CreateValuesFile(LPCWSTR lpszFileName);
 
 void Experiments() {
-	CreateValuesFile(L"C:\\Users\\Adept\\Desktop\\values.txt");
+	//CreateValuesFile(L"C:\\Users\\Adept\\Desktop\\values.txt");
 	LoadFile(L"C:\\Users\\Adept\\Desktop\\values.txt");
 	Other();
 }

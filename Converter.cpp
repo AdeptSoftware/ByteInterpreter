@@ -6,8 +6,8 @@ LPCWSTR GetFormat(const OPTIONS& bi) {
 	switch (bi.type) {
 	case DataType::INT64:						return (bi.bExtended ? L"%I64u" : L"%I64d");
 	case DataType::INT32:						return (bi.bExtended ? L"%I32u" : L"%I32d");
-	case DataType::INT16:						return (bi.bExtended ? L"%d" : L"%hd");
-	case DataType::INT8:						return (bi.bExtended ? L"%hhu" : L"%hhd");
+	case DataType::INT16:						return (bi.bExtended ? L"%d"    : L"%hd");
+	case DataType::INT8:						return (bi.bExtended ? L"%hhu"  : L"%hhd");
 	case DataType::HEX:							return L"%02X";
 	case DataType::OCT:							return L"%o";
 	case DataType::FLOAT:						return L"%.5f";

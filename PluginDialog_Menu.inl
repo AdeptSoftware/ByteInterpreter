@@ -20,7 +20,8 @@ void CPluginDialog::OnKeyDown(WPARAM code, LPARAM cnt) {
 		else if (IsKey(code, 'S', 's'))				OnMenuCommand(IDM_SAVE);
 		else if (IsKey(code, 'I', 'i'))				OnMenuCommand(IDM_BYTE_ORDER);
 		else if (IsKey(code, 'A', 'a'))				OnMenuCommand(IDM_AUTO_IMG_SIZE);
-		else if (IsKey(code, 'B', 'b'))				OnMenuCommand(IDM_BACKGROUND_COLOR);
+		else if (IsKey(code, 'B', 'b'))				OnMenuCommand(IDM_SET_BKG_COLOR);
+		else if (IsKey(code, 'M', 'm'))				OnMenuCommand(IDM_SET_YUV_MATRIX);
 		else if (IsKey(code, 'L', 'l'))				OnMenuCommand(IDM_SHOW_ALWAYS);
 		else if (IsKey(code, 'R', 'r'))				OnMenuCommand(IDM_SHOW_AS_RGB);
 	}
@@ -45,7 +46,7 @@ void CPluginDialog::OnMenuCommand(UINT uID, BOOL arg) {
 		SwitchCheck(m_hMenu, uID, IDM_BPP_DEFAULT, IDM_BPP_RGB444);
 		if (uID == IDM_BPP_DEFAULT)		InvertCheck(m_hMenu, IDM_BPP_RGB888);
 		else if (uID > IDM_BPP_FLOATS)	InvertCheck(m_hMenu, IDM_BPP_DEFAULT);
-		m_bi.clr.bpp = static_cast<BI::BPPFormat>(uID-IDM_BPP_DEFAULT);
+		m_bi.clr.bpp = static_cast<BI::BPPFormat>(uID - IDM_BPP_DEFAULT);
 		if (uID == IDM_BPP_FLOATS) {
 			SwitchCheck(m_hMenu, uID, IDM_SHOW_DEFAULT, IDM_SHOW_AS_REAL);
 			m_bi.clr.view_mode = BI::ColorModeView::REAL;
@@ -78,7 +79,8 @@ void CPluginDialog::OnMenuCommand(UINT uID, BOOL arg) {
 	else if (uID == IDM_AUTO_IMG_SIZE) {										// -
 		BOOL bChecked = InvertCheck(m_hMenu, uID);
 	}
-	else if (uID == IDM_BACKGROUND_COLOR) {}									// -
+	else if (uID == IDM_SET_YUV_MATRIX || uID == IDM_SET_BKG_COLOR)
+		m_settings.Show(static_cast<SettingMode>(uID-IDM_SET_YUV_MATRIX));
 	else if (uID == IDM_SAVE) {}												// -
 	else if (uID == IDM_USE_ARGB) {
 		m_bi.clr.bARGB = InvertCheck(m_hMenu, uID);
@@ -96,7 +98,6 @@ void CPluginDialog::OnMenuCommand(UINT uID, BOOL arg) {
 	else if (uID >= IDM_USE_YUV444 && uID <= IDM_USE_NV21) {					// -
 		SwitchCheck(m_hMenu, uID, IDM_USE_YUV444, IDM_USE_NV21);
 	}
-	else if (uID == IDM_SET_YUV_MATRIX) {}										// -
 	else if (uID >= IDM_SHOW_DEFAULT && uID <= IDM_SHOW_AS_REAL) {
 		SwitchCheck(m_hMenu, uID, IDM_SHOW_DEFAULT, IDM_SHOW_AS_REAL);
 		m_bi.clr.view_mode = static_cast<BI::ColorModeView>(uID-IDM_SHOW_DEFAULT);

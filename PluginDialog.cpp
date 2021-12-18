@@ -4,8 +4,8 @@
 #include "control_constants.h"
 
 const LPCWSTR	CLASS_NAME			= L"MainPluginDialog";
-const LONG		MIN_W				= 650;
-const LONG		MIN_H				= 133;
+const LONG		DLG_W				= 650;
+const LONG		DLG_H				= 133;
 const UINT		NOMOVE_CTRL_COUNT	= 3;
 
 const UINT		BUFFER_SIZE			= 32;
@@ -46,31 +46,13 @@ LRESULT CALLBACK EditProc(HWND hEdit, UINT uMsg, WPARAM wParam, LPARAM lParam) {
 
 // ========= ========= ========= ========= ========= ========= ========= =========
 
-LRESULT CALLBACK DialogProc(HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM lParam) {
-	CPluginDialog* pWnd = reinterpret_cast<CPluginDialog*>(CWnd::FindWnd(hWnd));
-	if (pWnd) {
-		if (uMsg == WM_PAINT) {
-			RECT rcWindow;
-			PAINTSTRUCT ps;
-			GetClientRect(hWnd, &rcWindow);
-			HDC hDC = BeginPaint(hWnd, &ps);
-			pWnd->OnPaint(hDC, rcWindow);
-			EndPaint(hWnd, &ps);
-		}
-		else if (uMsg >= WM_CTLCOLORMSGBOX && uMsg <= WM_CTLCOLORSTATIC)
-			return reinterpret_cast<LRESULT>(GetStockObject(WHITE_BRUSH));
-		else if (uMsg == WM_GETMINMAXINFO) {
-			MINMAXINFO* mm = (MINMAXINFO*)lParam;
-			mm->ptMinTrackSize.x = MIN_W;
-			mm->ptMinTrackSize.y = MIN_H;
-		}
-		else if (!pWnd->WndProc(hWnd, uMsg, wParam, lParam))
-			return 0;
-	}
-	return DefWindowProc(hWnd, uMsg, wParam, lParam);
-}
-
 BOOL CPluginDialog::WndProc(HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM lParam) {
+	if (uMsg == WM_GETMINMAXINFO) {
+		MINMAXINFO* mm = (MINMAXINFO*)lParam;
+		mm->ptMinTrackSize.x = DLG_W;
+		mm->ptMinTrackSize.y = DLG_H;
+		return TRUE;
+	}
 	m_cb_model.OnMessage(uMsg, wParam, lParam);
 	if (uMsg == WM_CLOSE)
 		return !ShowWindow(SW_HIDE);
@@ -82,6 +64,8 @@ BOOL CPluginDialog::WndProc(HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM lParam) 
 		OnCommand(lParam, LOWORD(wParam), HIWORD(wParam));
 	else if (uMsg == WM_CHANGE_VALUE)
 		OnChangeValue(wParam, lParam);
+	else if (uMsg == WM_SETTING_UPDATE)
+		OnUpdateSettings(reinterpret_cast<COLOR_CONVERTER_SETTINGS*>(lParam));
 	return TRUE;
 }
 
@@ -106,8 +90,9 @@ void CPluginDialog::OnPaint(HDC hDC, RECT& rc) {
 // ========= ========= ========= ========= ========= ========= ========= =========
 
 CPluginDialog::CPluginDialog(HINSTANCE hInstDLL)
-	: m_wrPluginDialog(DialogProc, CLASS_NAME, DLGWINDOWEXTRA),
+	: m_wrPluginDialog(CLASS_NAME, DLGWINDOWEXTRA),
 	  m_controls(&m_data, ID_CB_DATA_TYPES, &m_hFont),
+	  m_settings(&m_hFont),
 	  m_converter(m_bi) {
 	m_hMenu		 = LoadMenu(hInstDLL, MAKEINTRESOURCE(IDR_PLUGIN_MENU));
 	m_data.hInst = GetModuleHandle(nullptr);
@@ -130,9 +115,9 @@ POINT CPluginDialog::CalcWindowRect(LONG w, LONG h, LONG offsetRT) {
 }
 
 HWND CPluginDialog::Create(HWND hWndParent, HICON hIcon) {
-	POINT p = CalcWindowRect(MIN_W, MIN_H, 40); // Ширина, высота окна и отступ от верхнего правого угла экрана
+	POINT p = CalcWindowRect(DLG_W, DLG_H, 40); // Ширина, высота окна и отступ от верхнего правого угла экрана
 	DWORD dwStyle = WS_SYSMENU | WS_BORDER | WS_THICKFRAME | WS_CAPTION; 
-	m_data.hWnd = ::CreateWindowW(CLASS_NAME, L"", dwStyle, p.x, p.y, MIN_W, MIN_H, hWndParent, m_hMenu, m_data.hInst, nullptr);
+	m_data.hWnd = ::CreateWindowW(CLASS_NAME, L"", dwStyle, p.x, p.y, DLG_W, DLG_H, hWndParent, m_hMenu, m_data.hInst, nullptr);
 	if (!m_data.hWnd || !m_hMenu) {
 		MessageBox(nullptr, L"Window wasn't created!", CLASS_NAME, MB_OK);
 		return FALSE;
@@ -154,7 +139,7 @@ BOOL CPluginDialog::CreateControls() {
 	m_controls.Create(  0, 0,  20,  18, WC_EDIT,	 WS_VISIBLE | WS_CHILD | ES_CENTER | ES_NUMBER | WS_BORDER,   L"0", EditProc);		// ID_EDIT_STRIDE
 	m_controls.Create(  0, 0,  50,  18, WC_EDIT,	 WS_VISIBLE | WS_CHILD | ES_CENTER | ES_NUMBER | WS_BORDER,   L"0", EditProc);		// ID_EDIT_OFFSET
 	m_controls.Create(  0, 0,  28,  18, WC_EDIT,	 WS_VISIBLE | WS_CHILD | ES_CENTER | ES_NUMBER | WS_BORDER,   L"0", EditProc);		// ID_EDIT_SKIP
-	if (!m_controls.IsOK() || !hColorModel)
+	if (!m_controls.IsOK() || !hColorModel || !m_settings.Init(m_data.hWnd))
 		return FALSE;
 	// Определим дефолтовый WndProc для модифицированных Edit
 	g_lpfnDefaultEditProc = reinterpret_cast<WNDPROC>(GetWindowLong(m_controls[ID_EDIT_OUTPUT], GWLP_WNDPROC));
@@ -168,16 +153,16 @@ BOOL CPluginDialog::CreateControls() {
 	m_cb_model.Fill(m_cb_model.GetItem(0), L"RGBA\0GrayScale\0");
 	m_cb_model.SetCurSel(e_cast(m_bi.clr.type));
 	// Обновим текстовые поля
-	m_controls.FillNumberEdit(ID_EDIT_WIDTH,  m_bi.img.uWidth);
-	m_controls.FillNumberEdit(ID_EDIT_HEIGHT, m_bi.img.uHeight);
-	m_controls.FillNumberEdit(ID_EDIT_STRIDE, m_bi.uStride);
-	m_controls.FillNumberEdit(ID_EDIT_OFFSET, m_bi.uOffset);
-	m_controls.FillNumberEdit(ID_EDIT_SKIP,   m_bi.uSkip);
+	m_controls.FillNumberEdit(ID_EDIT_WIDTH,  L"%i", m_bi.img.uWidth);
+	m_controls.FillNumberEdit(ID_EDIT_HEIGHT, L"%i", m_bi.img.uHeight);
+	m_controls.FillNumberEdit(ID_EDIT_STRIDE, L"%i", m_bi.uStride);
+	m_controls.FillNumberEdit(ID_EDIT_OFFSET, L"%i", m_bi.uOffset);
+	m_controls.FillNumberEdit(ID_EDIT_SKIP,	  L"%i", m_bi.uSkip);
 	// Установим вывод для конвертера
 	m_converter.SetOutputText(m_controls[ID_EDIT_OUTPUT]);
 	m_converter.SetOutputProgress(m_data.hWnd);
 	// Рассчитаем позиции элементов управления и отобрази нужные
-	OnSizing(MIN_W, MIN_H);
+	OnSizing(DLG_W, DLG_H);
 	ShowColorControls();
 	ShowDataControls();
 	return TRUE;
@@ -258,6 +243,10 @@ void CPluginDialog::OnChangeValue(UINT uCtrlID, UINT uValue) {
 			UpdateOutput(FALSE);
 		//if (m_cb_model.IsWindowVisible()) m_img.Redraw(); 
 	}
+}
+
+void CPluginDialog::OnUpdateSettings(COLOR_CONVERTER_SETTINGS* pCSS) {
+
 }
 
 void CPluginDialog::UpdateOutput(BOOL bCheckKeyState) {

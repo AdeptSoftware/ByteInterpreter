@@ -218,6 +218,6 @@ void XYY::ToRGB() {
 }
 
 void LMS::ToRGB() {
-	m_conv.LMStoXYZ(m_temp, *this, Colors::LMS_CONVERSION::LMS2XYZ_D65_2);
+	m_conv.LMStoXYZ(m_temp, *this, LMS_CONVERSION::LMS2XYZ_D65_2);
 	m_conv.XYZD65toRGB(m_out, m_temp);
 }

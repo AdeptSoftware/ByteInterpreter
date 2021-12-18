@@ -63,9 +63,6 @@
     <ClInclude Include="resource.h">
       <Filter>Файлы заголовков</Filter>
     </ClInclude>
-    <ClInclude Include="ControlManager.h">
-      <Filter>Windows\includes</Filter>
-    </ClInclude>
     <ClInclude Include="PluginDialog.h">
       <Filter>Windows\includes</Filter>
     </ClInclude>
@@ -117,6 +114,12 @@
     <ClInclude Include="ConversionData.h">
       <Filter>ByteInterpreter\includes</Filter>
     </ClInclude>
+    <ClInclude Include="SettingDialog.h">
+      <Filter>Windows\includes</Filter>
+    </ClInclude>
+    <ClInclude Include="ControlManager.h">
+      <Filter>Windows\sources</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="pch.cpp">
@@ -163,6 +166,9 @@
     </ClCompile>
     <ClCompile Include="Tokenizer.cpp">
       <Filter>ByteInterpreter\sources</Filter>
+    </ClCompile>
+    <ClCompile Include="SettingDialog.cpp">
+      <Filter>Windows\sources</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
