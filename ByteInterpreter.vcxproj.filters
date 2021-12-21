@@ -84,34 +84,19 @@
     <ClInclude Include="ControlEx.h">
       <Filter>Windows\includes</Filter>
     </ClInclude>
-    <ClInclude Include="ByteTokenizer.h">
+    <ClInclude Include="BI\ByteTokenizer.h">
       <Filter>ByteInterpreter\includes</Filter>
     </ClInclude>
     <ClInclude Include="exports.h">
       <Filter>Exports</Filter>
     </ClInclude>
-    <ClInclude Include="m3x3_functions.h">
-      <Filter>ByteInterpreter</Filter>
-    </ClInclude>
     <ClInclude Include="Converter.h">
       <Filter>Windows\includes</Filter>
     </ClInclude>
-    <ClInclude Include="ColorConverter.h">
+    <ClInclude Include="BI\ColorConverter.h">
       <Filter>ByteInterpreter\includes</Filter>
     </ClInclude>
-    <ClInclude Include="ByteInterpreter.h">
-      <Filter>ByteInterpreter\includes</Filter>
-    </ClInclude>
-    <ClInclude Include="ConversionMethods.h">
-      <Filter>ByteInterpreter\includes</Filter>
-    </ClInclude>
-    <ClInclude Include="Subsampling.h">
-      <Filter>ByteInterpreter\includes</Filter>
-    </ClInclude>
-    <ClInclude Include="Tokenizer.h">
-      <Filter>ByteInterpreter\includes</Filter>
-    </ClInclude>
-    <ClInclude Include="ConversionData.h">
+    <ClInclude Include="BI\ByteInterpreter.h">
       <Filter>ByteInterpreter\includes</Filter>
     </ClInclude>
     <ClInclude Include="SettingDialog.h">
@@ -119,6 +104,30 @@
     </ClInclude>
     <ClInclude Include="ControlManager.h">
       <Filter>Windows\sources</Filter>
+    </ClInclude>
+    <ClInclude Include="BI\Tokenizers.h">
+      <Filter>ByteInterpreter\includes</Filter>
+    </ClInclude>
+    <ClInclude Include="BI\Subsampling.h">
+      <Filter>ByteInterpreter\includes</Filter>
+    </ClInclude>
+    <ClInclude Include="BI\ConversionData.h">
+      <Filter>ByteInterpreter\includes</Filter>
+    </ClInclude>
+    <ClInclude Include="BI\Swappers.h">
+      <Filter>ByteInterpreter\includes</Filter>
+    </ClInclude>
+    <ClInclude Include="BI\ToRGB.h">
+      <Filter>ByteInterpreter\includes</Filter>
+    </ClInclude>
+    <ClInclude Include="BI\Interfaces.h">
+      <Filter>ByteInterpreter\includes</Filter>
+    </ClInclude>
+    <ClInclude Include="BI\ToString.h">
+      <Filter>ByteInterpreter\includes</Filter>
+    </ClInclude>
+    <ClInclude Include="Adapters.h">
+      <Filter>ByteInterpreter\includes</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -140,7 +149,7 @@
     <ClCompile Include="Debug.cpp">
       <Filter>Debug</Filter>
     </ClCompile>
-    <ClCompile Include="ByteTokenizer.cpp">
+    <ClCompile Include="BI\ByteTokenizer.cpp">
       <Filter>ByteInterpreter\sources</Filter>
     </ClCompile>
     <ClCompile Include="exports.cpp">
@@ -152,23 +161,32 @@
     <ClCompile Include="Converter.cpp">
       <Filter>Windows\sources</Filter>
     </ClCompile>
-    <ClCompile Include="ColorConverter.cpp">
+    <ClCompile Include="BI\ColorConverter.cpp">
       <Filter>ByteInterpreter\sources</Filter>
     </ClCompile>
-    <ClCompile Include="ConversionMethods.cpp">
-      <Filter>ByteInterpreter\sources</Filter>
-    </ClCompile>
-    <ClCompile Include="ByteInterpreter.cpp">
-      <Filter>ByteInterpreter\sources</Filter>
-    </ClCompile>
-    <ClCompile Include="Subsampling.cpp">
-      <Filter>ByteInterpreter\sources</Filter>
-    </ClCompile>
-    <ClCompile Include="Tokenizer.cpp">
+    <ClCompile Include="BI\ByteInterpreter.cpp">
       <Filter>ByteInterpreter\sources</Filter>
     </ClCompile>
     <ClCompile Include="SettingDialog.cpp">
       <Filter>Windows\sources</Filter>
+    </ClCompile>
+    <ClCompile Include="BI\Tokenizers.cpp">
+      <Filter>ByteInterpreter\sources</Filter>
+    </ClCompile>
+    <ClCompile Include="BI\Subsampling.cpp">
+      <Filter>ByteInterpreter\sources</Filter>
+    </ClCompile>
+    <ClCompile Include="BI\Swappers.cpp">
+      <Filter>ByteInterpreter\sources</Filter>
+    </ClCompile>
+    <ClCompile Include="BI\ToRGB.cpp">
+      <Filter>ByteInterpreter\sources</Filter>
+    </ClCompile>
+    <ClCompile Include="BI\ToString.cpp">
+      <Filter>ByteInterpreter\sources</Filter>
+    </ClCompile>
+    <ClCompile Include="BI\Adapters.cpp">
+      <Filter>ByteInterpreter\sources</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

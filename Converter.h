@@ -1,6 +1,7 @@
 #pragma once
-#include "ByteInterpreter.h"
 #include <string>
+#include "BI\ByteInterpreter.h"
+#define BI ByteInterpreter
 
 
 class CConverter : public BI::CAbstractByteInterpreter {
@@ -14,15 +15,15 @@ public:
 protected:
 	virtual void OnIteration();
 	virtual void OnInitialize();
+	virtual void OnEndOfBytes();
 
-	std::wstring		m_szOutputText;
-	HWND				m_hWndOutputText		= nullptr;
-	HWND				m_hWndOutputProgress	= nullptr;
+	std::wstring			m_szOutputText;
+	HWND					m_hWndOutputText		= nullptr;
+	HWND					m_hWndOutputProgress	= nullptr;
 
 private:
-	float				m_fProgress = 0.0;
-	wchar_t				m_szSeparator[BI::BUFFER_SIZE];
-	BI::TOSTRING_DATA	m_buf;
+	float					m_fProgress				= 0.0;
+	wchar_t					m_szSeparator[BI::BUFFER_SIZE]{ 0 };
 
 	void UpdateProgressText();
 	void PrintBytes();

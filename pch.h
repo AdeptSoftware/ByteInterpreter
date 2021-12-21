@@ -10,4 +10,7 @@
 // Добавьте сюда заголовочные файлы для предварительной компиляции
 #include "framework.h"
 
+// "Флаги"
+#define BYTEINTERPRETER_BYTE2STRING
+
 #endif //PCH_H

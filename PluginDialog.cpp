@@ -97,6 +97,7 @@ CPluginDialog::CPluginDialog(HINSTANCE hInstDLL)
 	m_hMenu		 = LoadMenu(hInstDLL, MAKEINTRESOURCE(IDR_PLUGIN_MENU));
 	m_data.hInst = GetModuleHandle(nullptr);
 	m_hFont		 = MakeFont(L"Arial", 8);
+	m_converter.ChangeMethods();
 }
 
 CPluginDialog::~CPluginDialog() {
@@ -144,14 +145,14 @@ BOOL CPluginDialog::CreateControls() {
 	// Определим дефолтовый WndProc для модифицированных Edit
 	g_lpfnDefaultEditProc = reinterpret_cast<WNDPROC>(GetWindowLong(m_controls[ID_EDIT_OUTPUT], GWLP_WNDPROC));
 	// Заполним выпадающие списки (массив "types" должен соотвествовать enum class DataType) // └ elem
-	m_controls.FillComboBox(ID_CB_DATA_TYPES, L"Int64\0Int32\0Int16\0Int8\0HEX\0OCT\0BIN\0Float\0Double\0Color\0Unicode\0", e_cast(m_bi.type));
+	m_controls.FillComboBox(ID_CB_DATA_TYPES, L"Int64\0Int32\0Int16\0Int8\0HEX\0OCT\0BIN\0Float\0Double\0Color\0Unicode\0", static_cast<int>(m_bi.type));
 	m_cb_model.Fill(nullptr, L"RGB\0CMYK\0HSV\0CIE XYZ\0YUV\0YCoCg\0");
 	m_cb_model.Fill(m_cb_model.GetItem(4), L"YCbCr\0YIQ\0YDbDr\0");
 	m_cb_model.Fill(m_cb_model.GetItem(3), L"L*a*b*\0xyY\0Luv\0LCH(ab)\0LCH(uv)\0LMS\0Hunter L,a,b\0");
 	m_cb_model.Fill(m_cb_model.GetItem(2), L"HSL\0HSLA\0HSI\0HWB\0");
 	m_cb_model.Fill(m_cb_model.GetItem(1), L"CMY\0");
 	m_cb_model.Fill(m_cb_model.GetItem(0), L"RGBA\0GrayScale\0");
-	m_cb_model.SetCurSel(e_cast(m_bi.clr.type));
+	m_cb_model.SetCurSel(static_cast<int>(m_bi.clr.type));
 	// Обновим текстовые поля
 	m_controls.FillNumberEdit(ID_EDIT_WIDTH,  L"%i", m_bi.img.uWidth);
 	m_controls.FillNumberEdit(ID_EDIT_HEIGHT, L"%i", m_bi.img.uHeight);
@@ -224,7 +225,7 @@ void CPluginDialog::OnCommand(LPARAM lParam, UINT uCtrlID, UINT uNotify, void* p
 	}
 	// Реакция на изменение CheckBox'а
 	else if (uCtrlID == ID_BTN_EXTENDED && uNotify == BN_CLICKED) {
-		m_bi.bExtended = (SendMessage(reinterpret_cast<HWND>(lParam), BM_GETCHECK, NULL, NULL) == BST_CHECKED);
+		m_bi.flags.bExtended = (SendMessage(reinterpret_cast<HWND>(lParam), BM_GETCHECK, NULL, NULL) == BST_CHECKED);
 		UpdateOutput();
 	}
 	else if (lParam == NULL)
@@ -246,13 +247,14 @@ void CPluginDialog::OnChangeValue(UINT uCtrlID, UINT uValue) {
 }
 
 void CPluginDialog::OnUpdateSettings(COLOR_CONVERTER_SETTINGS* pCSS) {
-
+	//m_bi.clr.converter.RGBA_SetBackgroundColor(reinterpret_cast<>(pCSS->bkg))
 }
 
 void CPluginDialog::UpdateOutput(BOOL bCheckKeyState) {
 	if (bCheckKeyState && GetAsyncKeyState(VK_CONTROL))
 		return;
-	m_converter.Extract();
+	m_converter.ChangeMethods();
+	m_converter.Read();
 }
 
 void CPluginDialog::SetBytes(BYTE* bytes, ULONG length, BOOL bIsWideChar) {
@@ -273,7 +275,7 @@ void CPluginDialog::SetBytes(BYTE* bytes, ULONG length, BOOL bIsWideChar) {
 		m_bi.uOffset = 0;
 		SetWindowText(m_controls[ID_EDIT_OFFSET], L"0");
 	}
-	UpdateOutput(FALSE);
+	m_converter.Read();
 }
 
 #include "PluginDialog_Menu.inl"

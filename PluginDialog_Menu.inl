@@ -49,7 +49,9 @@ void CPluginDialog::OnMenuCommand(UINT uID, BOOL arg) {
 		m_bi.clr.bpp = static_cast<BI::BPPFormat>(uID - IDM_BPP_DEFAULT);
 		if (uID == IDM_BPP_FLOATS) {
 			SwitchCheck(m_hMenu, uID, IDM_SHOW_DEFAULT, IDM_SHOW_AS_REAL);
-			m_bi.clr.view_mode = BI::ColorModeView::REAL;
+#ifdef BYTEINTERPRETER_BYTE2STRING
+			m_bi.clr.viewmode = BI::ColorViewMode::REAL;
+#endif // END BYTEINTERPRETER_BYTE2STRING
 		}
 		UpdateOutput();
 	}
@@ -70,8 +72,16 @@ void CPluginDialog::OnMenuCommand(UINT uID, BOOL arg) {
 		BOOL bChecked = InvertCheck(m_hMenu, uID);
 	}
 	else if (uID == IDM_BYTE_ORDER) {
-		m_bi.bInvBytesOrder = InvertCheck(m_hMenu, uID);
-		UpdateOutput();
+		m_bi.flags.bInvert = InvertCheck(m_hMenu, uID);
+		UpdateOutput(FALSE);
+	}
+	else if (uID == IDM_USE_YCOCG_R) {
+		m_bi.flags.bYCoCgR = InvertCheck(m_hMenu, uID);
+		UpdateOutput(FALSE);
+	}
+	else if (uID == IDM_USE_FULLRANGE_YCBCR) {
+		m_bi.flags.bFullRangeYCbCr = InvertCheck(m_hMenu, uID);
+		UpdateOutput(FALSE);
 	}
 	else if (uID == IDM_SHOW_ALWAYS) {											// -
 		BOOL bChecked = InvertCheck(m_hMenu, uID);
@@ -83,7 +93,7 @@ void CPluginDialog::OnMenuCommand(UINT uID, BOOL arg) {
 		m_settings.Show(static_cast<SettingMode>(uID-IDM_SET_YUV_MATRIX));
 	else if (uID == IDM_SAVE) {}												// -
 	else if (uID == IDM_USE_ARGB) {
-		m_bi.clr.bARGB = InvertCheck(m_hMenu, uID);
+		m_bi.flags.bARGB = InvertCheck(m_hMenu, uID);
 		UpdateOutput();
 	}
 	else if (uID == IDM_OBSERVER_2 || uID == IDM_OBSERVER_10) {					// -
@@ -92,19 +102,18 @@ void CPluginDialog::OnMenuCommand(UINT uID, BOOL arg) {
 	else if (uID >= IDM_ILLUMINANT_A && uID <= IDM_ILLUMINANT_F12) {			// -
 		SwitchCheck(m_hMenu, uID, IDM_ILLUMINANT_A, IDM_ILLUMINANT_F12);
 	}
-	else if (uID == IDM_USE_LCH_AB || uID == IDM_USE_LCH_UV) {					// -
-		SwitchCheck(m_hMenu, uID, IDM_USE_LCH_AB, IDM_USE_LCH_UV);
-	}
 	else if (uID >= IDM_USE_YUV444 && uID <= IDM_USE_NV21) {					// -
 		SwitchCheck(m_hMenu, uID, IDM_USE_YUV444, IDM_USE_NV21);
 	}
 	else if (uID >= IDM_SHOW_DEFAULT && uID <= IDM_SHOW_AS_REAL) {
 		SwitchCheck(m_hMenu, uID, IDM_SHOW_DEFAULT, IDM_SHOW_AS_REAL);
-		m_bi.clr.view_mode = static_cast<BI::ColorModeView>(uID-IDM_SHOW_DEFAULT);
+#ifdef BYTEINTERPRETER_BYTE2STRING
+		m_bi.clr.viewmode = static_cast<BI::ColorViewMode>(uID-IDM_SHOW_DEFAULT);
+#endif // END BYTEINTERPRETER_BYTE2STRING
 		UpdateOutput();
 	}
 	else if (uID == IDM_SHOW_AS_RGB) {
-		m_bi.clr.bShowAsRGB = InvertCheck(m_hMenu, uID);
+		m_bi.flags.bShowAsRGB = InvertCheck(m_hMenu, uID);
 		UpdateOutput(0);
 	}
 }

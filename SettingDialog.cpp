@@ -3,6 +3,8 @@
 #include "control_constants.h"
 #include "ColorConverter.h"
 
+using namespace ByteInterpreter;
+
 const wchar_t	CLASS_NAME[]	= L"BISettingDialog";
 const wchar_t	FMT_DOUBLE[]	= L"%.3f";
 const UINT		OFFSET			= 92;
@@ -86,7 +88,7 @@ void CSettingDialog::OnPaint(HDC hDC, RECT& rc) {
 		int nCenter = (DLG_W-(55*3)-(2*DIST))/2;
 		wchar_t buf[16]{ 0 };
 		double out[3][3]{ 0.0 };
-		ByteInterpreter::Colors::CColorConverter conv;
+		CColorConverter conv;
 		conv.YUV_CreateTransformMatrix(m_ccs.W);
 		conv.YUV_RotateTransformMatrix(m_ccs.dAngle);
 		conv.YUV_GetTransformMatrix(reinterpret_cast<double*>(out), TRUE);
@@ -179,7 +181,7 @@ BOOL CSettingDialog::Init(HWND hWndParent) {
 	if (!m_controls.IsOK())
 		return FALSE;
 	m_controls.FillComboBox(ID_SD_CB_BTSTANDART, L"Custom\0BT.470\0BT.601\0BT.709\0BT.2100\0", 1);
-	SetStandard(e_cast(ByteInterpreter::BT_STANDARD::BT470)+1);
+	SetStandard(static_cast<int>(ByteInterpreter::BT_STANDARD::BT470)+1);
 	memcpy_s(&m_backup, SZSTRUCT, &m_ccs, SZSTRUCT);
 	return TRUE;
 }
@@ -204,7 +206,7 @@ void CSettingDialog::SetStandard(int nIndex) {
 
 	m_ccs.nStandard = nIndex;
 	auto bt = static_cast<ByteInterpreter::BT_STANDARD>(nIndex-1);
-	ByteInterpreter::Colors::CColorConverter::YUV_GetConversionData(m_ccs.W, bt);
+	CColorConverter::YUV_GetConversionData(m_ccs.W, bt);
 	RefreshEditControls();
 	Invalidate(TRUE);
 }

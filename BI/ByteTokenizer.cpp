@@ -1,12 +1,14 @@
 #include "pch.h"
 #include "ByteTokenizer.h"
-
 using namespace ByteInterpreter;
 
-ULONGLONG CByteTokenizer::GetLength()               { return m_len; }
-ULONGLONG CByteTokenizer::GetPos()                  { return m_pos; }
-BOOL      CByteTokenizer::IsEmpty()                 { return (m_pos >= m_len); }
-void      CByteTokenizer::Stride(ULONGLONG count)   { m_pos += count; }
+const UINT SZBYTE = 8;
+
+
+ULONGLONG CByteTokenizer::GetLength()           { return m_len; }
+ULONGLONG CByteTokenizer::GetPos()              { return m_pos; }
+BOOL      CByteTokenizer::IsEmpty()             { return (m_pos >= m_len); }
+void      CByteTokenizer::SetPos(ULONGLONG pos) { m_pos = pos; }
 
 void CByteTokenizer::SetBytes(BYTE* bytes, ULONGLONG len) {
     m_bytes = bytes;
@@ -14,12 +16,11 @@ void CByteTokenizer::SetBytes(BYTE* bytes, ULONGLONG len) {
     m_pos   = 0ull;
 }
 
-void CByteTokenizer::Seek(LONGLONG offset, CByteTokenizer::POSITION from) {
-    if (offset < 0 && from != POSITION::cur)                    return;
-    if (offset < 0 && m_pos <= static_cast<ULONGLONG>(-offset)) m_pos  = 0;
-    else if (from == POSITION::begin)                           m_pos  = offset;
-    else if (from == POSITION::cur)                             m_pos += offset;
-    else                                                        m_pos  = m_len-offset;
+void CByteTokenizer::Seek(LONGLONG offset) {
+    if (offset < 0 && m_pos < static_cast<ULONGLONG>(-offset))
+        m_pos = 0;
+    else
+        m_pos += offset;
 }
 
 ULONGLONG CByteTokenizer::Next(UINT count) {

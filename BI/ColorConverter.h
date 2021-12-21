@@ -1,14 +1,6 @@
 #pragma once
-#include "pch.h"
-#include <type_traits>
-
-// Преобразование enum class E : typename T к базовому типу T
-template <typename E> constexpr auto e_cast(E e) noexcept {
-	return static_cast<std::underlying_type_t<E>>(e);
-}
 
 namespace ByteInterpreter {
-	const double BYTEMAX = 255.0;
 	// Стандартный колориметрический наблюдатель
 	enum class XYZ_OBSERVER : int { CIE1931_2, CIE1964_10 };
 	// Стандартный источник света
@@ -75,6 +67,7 @@ namespace Colors {
 	// Значения	LMS в диапазоне зависят от используемой LMS_CONVERSION...
 	IMPLEMENT_COLOR_RW(LMS, L, M, S);
 
+} // END namespace ByteInterpreter::Colors
 
 // ========= ========= ========= ========= ========= ========= ========= =========
 
@@ -93,7 +86,7 @@ protected:
 	BT_STANDARD     m_yuvStandardBT = BT_STANDARD::BT470;
 
 	// Для конвертации RGBA
-	SRGB             m_clrBackground = { 1.0, 1.0, 1.0 };
+	Colors::SRGB   m_clrBackground = { 1.0, 1.0, 1.0 };
 
 public:
 	CColorConverter();
@@ -104,70 +97,70 @@ public:
 	const double* XYZ_GetReferenceWhite(const XYZ_OBSERVER& stdObserver, const XYZ_ILLUMINANT& illuminant);
 
 	// В out предварительно нужно настроить "опорный угол" и "освещение"
-	void XYZ_Convert(XYZ& out, const XYZ& in);
+	void XYZ_Convert(Colors::XYZ& out, const Colors::XYZ& in);
 	// Конвертирует XYZ D65/2 в RGB
-	void XYZD65toRGB(SRGB& out, const XYZ& in);
+	void XYZD65toRGB(Colors::SRGB& out, const Colors::XYZ& in);
 	// Конвертирует RGB в XYZ D65/2
-	void RGBtoXYZD65(XYZ& out, const SRGB& in);
+	void RGBtoXYZD65(Colors::XYZ& out, const Colors::SRGB& in);
 
 	// ========= ========= ========= ========= ========= ========= ========= =========
 
-	void xyY2XYZ(XYZ& out, const XYY& in);
-	void XYZ2xyY(XYY& out, const XYZ& in);
-	void XYZ2HunterLab(HLAB& out, const XYZ& in);
-	void HunterLab2XYZ(XYZ& out, const HLAB& in);
-	void XYZ2CIELAB(LAB& out, const XYZ& in);
-	void CIELAB2XYZ(XYZ& out, const LAB& in);
-	void XYZ2CIELUV(LUV& out, const XYZ& in);
-	void CIELUV2XYZ(XYZ& out, const LUV& in);
+	void xyY2XYZ(Colors::XYZ& out, const Colors::XYY& in);
+	void XYZ2xyY(Colors::XYY& out, const Colors::XYZ& in);
+	void XYZ2HunterLab(Colors::HLAB& out, const Colors::XYZ& in);
+	void HunterLab2XYZ(Colors::XYZ& out, const Colors::HLAB& in);
+	void XYZ2CIELAB(Colors::LAB& out, const Colors::XYZ& in);
+	void CIELAB2XYZ(Colors::XYZ& out, const Colors::LAB& in);
+	void XYZ2CIELUV(Colors::LUV& out, const Colors::XYZ& in);
+	void CIELUV2XYZ(Colors::XYZ& out, const Colors::LUV& in);
 
-	void CIELAB2CIELCHab(LCH& out, const LAB& in);
-	void CIELCHab2CIELAB(LAB& out, const LCH& in);
-	void CIELUV2CIELCHuv(LCH& out, const LUV& in);
-	void CIELCHuv2CIELUV(LUV& out, const LCH& in);
+	void CIELAB2CIELCHab(Colors::LCH& out, const Colors::LAB& in);
+	void CIELCHab2CIELAB(Colors::LAB& out, const Colors::LCH& in);
+	void CIELUV2CIELCHuv(Colors::LCH& out, const Colors::LUV& in);
+	void CIELCHuv2CIELUV(Colors::LUV& out, const Colors::LCH& in);
 
-	void XYZD65toLMS(LMS& out, const XYZ& in, const LMS_CONVERSION c);
-	void LMStoXYZ(XYZ& out, const LMS& in, const LMS_CONVERSION c);
+	void XYZD65toLMS(Colors::LMS& out, const Colors::XYZ& in, const LMS_CONVERSION c);
+	void LMStoXYZ(Colors::XYZ& out, const Colors::LMS& in, const LMS_CONVERSION c);
 
 	// ========= ========= ========= ========= ========= ========= ========= =========
 
 	// Алгоритм не оптиизирован
 	// Альфа канал (A) - имеет диапазон [0.0..1.0]
-	void HSLA2HSL(HSL& out, const HSLA& in);
+	void HSLA2HSL(Colors::HSL& out, const Colors::HSLA& in);
 	// Альфа канал (A) - имеет диапазон [0.0..1.0]
-	void RGBA2RGB(SRGB& out, const RGBA& in);
+	void RGBA2RGB(Colors::SRGB& out, const Colors::RGBA& in);
 	// Альфа канал (A) - имеет диапазон [0.0..1.0]
-	COLORREF RGBA2RGB(const RGBA& in);
+	COLORREF RGBA2RGB(const Colors::RGBA& in);
 	// Диапазон lightness [0.0..1.0]
-	static void GrayScale2RGB(SRGB& out, const double lightness);
+	static void GrayScale2RGB(Colors::SRGB& out, const double lightness);
 
-	void RGBA_SetBackgroundColor(const SRGB& clr);
-
-	// ========= ========= ========= ========= ========= ========= ========= =========
-
-	static void HSV2RGB(SRGB& out, const HSV& in);
-	static void HSL2RGB(SRGB& out, const HSL& in);
-	static void HSI2RGB(SRGB& out, const HSI& in);
-
-	static void RGB2HSV(HSV& out, const SRGB& in);
-	static void RGB2HSL(HSL& out, const SRGB& in);
-	static void RGB2HSI(HSI& out, const SRGB& in);
-
-	static void HSV2HWB(HWB& out, const HSV& in);
-	static void HWB2HSV(HSV& out, const HWB& in);
+	void RGBA_SetBackgroundColor(const Colors::SRGB& clr);
 
 	// ========= ========= ========= ========= ========= ========= ========= =========
 
-	static void RGB2CMY(CMY& out, const SRGB& in);
-	static void CMY2RGB(SRGB& out, const CMY& in);
-	static void CMYK2RGB(SRGB& out, const CMYK& in);
-	static void CMYK2CMY(CMY& out, const CMYK& in);
-	static void CMY2CMYK(CMYK& out, const CMY& in);
+	static void HSV2RGB(Colors::SRGB& out, const Colors::HSV& in);
+	static void HSL2RGB(Colors::SRGB& out, const Colors::HSL& in);
+	static void HSI2RGB(Colors::SRGB& out, const Colors::HSI& in);
+
+	static void RGB2HSV(Colors::HSV& out, const Colors::SRGB& in);
+	static void RGB2HSL(Colors::HSL& out, const Colors::SRGB& in);
+	static void RGB2HSI(Colors::HSI& out, const Colors::SRGB& in);
+
+	static void HSV2HWB(Colors::HWB& out, const Colors::HSV& in);
+	static void HWB2HSV(Colors::HSV& out, const Colors::HWB& in);
+
+	// ========= ========= ========= ========= ========= ========= ========= =========
+
+	static void RGB2CMY(Colors::CMY& out, const Colors::SRGB& in);
+	static void CMY2RGB(Colors::SRGB& out, const Colors::CMY& in);
+	static void CMYK2RGB(Colors::SRGB& out, const Colors::CMYK& in);
+	static void CMYK2CMY(Colors::CMY& out, const Colors::CMYK& in);
+	static void CMY2CMYK(Colors::CMYK& out, const Colors::CMY& in);
 	
 	// ========= ========= ========= ========= ========= ========= ========= =========
 
-	static void YCoCg2RGB(SRGB& out, const YCOCG& in, BOOL bYCoCgR);
-	static void RGB2YCoCg(YCOCG& out, const SRGB& in, BOOL bYCoCgR);
+	static void YCoCg2RGB(Colors::SRGB& out, const Colors::YCOCG& in, BOOL bYCoCgR);
+	static void RGB2YCoCg(Colors::YCOCG& out, const Colors::SRGB& in, BOOL bYCoCgR);
 
 	// ========= ========= ========= ========= ========= ========= ========= =========
 
@@ -184,27 +177,16 @@ public:
 	void YUV_RotateTransformMatrix(const double deg);
 
 	// Пример для YCbCr: YUV2RGB(Y - (bFullRange ? 0.0 : 16.0/255), Cb-0.5, Cr-0.5)
-	void YUV2RGB(SRGB& out, const YUV& in);
+	void YUV2RGB(Colors::SRGB& out, const Colors::YUV& in);
 
 	// Пример для YCbCr: RGB2YUV(R, G, B) и	out += { (bFullRange ? 0.0 : 16.0/255), 0.5, 0.5 }
-	void RGB2YUV(YUV& out, const SRGB& in);
+	void RGB2YUV(Colors::YUV& out, const Colors::SRGB& in);
 
 private:
 	// XYZ D65/2 deg (RGB Working Space: sRGB)
 	void XYZ_CreateTransformationMatrix();
 };
-
-} // END namespace ByteInterpreter::Colors
 } // END namespace ByteInterpreter
-
-/*
-* Семплирование YUV и им подобного
-* Y'UV444	RGB <- YUV2RGB()	 <- Bytes[03] = { Y, U, V }
-* Y'UV422	RGB <- YUV2RGB() x02 <- Bytes[04] = { U, Y1, V, Y2 }
-* Y'UV411	RGB <- YUV2RGB() x04 <- Bytes[06] = { U, Y1, Y2, V, Y3, Y4 }
-* Y'UV420p  RGB <- YUV2RGB() x24 <- Bytes[36] = { Y1..Y24, U1..U6, V1..V6 }
-* Y'UV420sp // en.wikipedia.org/wiki/YUV#Y%E2%80%B2UV420sp_(NV21)_to_RGB_conversion_(Android)
-*/
 
 /*
 * YUV = YPbPr = сигналы Y'CbCr до нормирования и смещения сигналов для перевода сигналов в цифровую форму

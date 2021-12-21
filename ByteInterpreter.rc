@@ -107,11 +107,6 @@ BEGIN
                     MENUITEM "F12\tUltralume 30 (Philips TL83)", IDM_ILLUMINANT_F12
                 END
             END
-            POPUP "CIE LCH"
-            BEGIN
-                MENUITEM "LCH (ab)",                    IDM_USE_LCH_AB, CHECKED
-                MENUITEM "LCH (uv)",                    IDM_USE_LCH_UV
-            END
             POPUP "YUV"
             BEGIN
                 POPUP "Семплирование"
@@ -123,7 +118,9 @@ BEGIN
                     MENUITEM "4:2:0 (NV21)\t3 bytes per 1 px", IDM_USE_NV21
                 END
                 MENUITEM "Матрица трансформации...\tCtrl+M", IDM_SET_YUV_MATRIX
+                MENUITEM "Исп. полный диапазон YCbCr",  IDM_USE_FULLRANGE_YCBCR, CHECKED
             END
+            MENUITEM "Исп. YCoCg-R",                IDM_USE_YCOCG_R
         END
         POPUP "Бит на пискель"
         BEGIN

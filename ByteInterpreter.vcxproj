@@ -162,18 +162,19 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <ClInclude Include="ByteTokenizer.h" />
-    <ClInclude Include="ColorConverter.h" />
-    <ClInclude Include="ConversionData.h" />
-    <ClInclude Include="ConversionMethods.h" />
+    <ClInclude Include="Adapters.h" />
+    <ClInclude Include="BI\ByteTokenizer.h" />
+    <ClInclude Include="BI\ColorConverter.h" />
     <ClInclude Include="Converter.h" />
     <ClInclude Include="ComboBoxTree.h" />
     <ClInclude Include="ControlEx.h" />
     <ClInclude Include="ControlManager.h" />
     <ClInclude Include="control_constants.h" />
-    <ClInclude Include="ByteInterpreter.h" />
-    <ClInclude Include="m3x3_functions.h" />
+    <ClInclude Include="BI\ByteInterpreter.h" />
+    <ClInclude Include="BI\ConversionData.h" />
+    <ClInclude Include="BI\Interfaces.h" />
     <ClInclude Include="exports.h" />
+    <ClInclude Include="BI\ToRGB.h" />
     <ClInclude Include="PluginDialog.h" />
     <ClInclude Include="AkelDLL.h" />
     <ClInclude Include="AkelEdit.h" />
@@ -184,20 +185,23 @@
     <ClInclude Include="resource.h" />
     <ClInclude Include="PopupTreeView.h" />
     <ClInclude Include="SettingDialog.h" />
-    <ClInclude Include="Subsampling.h" />
-    <ClInclude Include="Tokenizer.h" />
+    <ClInclude Include="BI\Subsampling.h" />
+    <ClInclude Include="BI\Swappers.h" />
+    <ClInclude Include="BI\Tokenizers.h" />
+    <ClInclude Include="BI\ToString.h" />
     <ClInclude Include="Window.h" />
     <ClInclude Include="WindowData.h" />
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="ByteTokenizer.cpp" />
-    <ClCompile Include="ColorConverter.cpp" />
-    <ClCompile Include="ByteInterpreter.cpp" />
-    <ClCompile Include="ConversionMethods.cpp" />
+    <ClCompile Include="BI\Adapters.cpp" />
+    <ClCompile Include="BI\ByteTokenizer.cpp" />
+    <ClCompile Include="BI\ColorConverter.cpp" />
+    <ClCompile Include="BI\ByteInterpreter.cpp" />
     <ClCompile Include="Converter.cpp" />
     <ClCompile Include="ComboBoxTree.cpp" />
     <ClCompile Include="Debug.cpp" />
     <ClCompile Include="exports.cpp" />
+    <ClCompile Include="BI\ToRGB.cpp" />
     <ClCompile Include="PluginDialog.cpp" />
     <ClCompile Include="dllmain.cpp" />
     <ClCompile Include="pch.cpp">
@@ -208,8 +212,10 @@
     </ClCompile>
     <ClCompile Include="PopupTreeView.cpp" />
     <ClCompile Include="SettingDialog.cpp" />
-    <ClCompile Include="Subsampling.cpp" />
-    <ClCompile Include="Tokenizer.cpp" />
+    <ClCompile Include="BI\Subsampling.cpp" />
+    <ClCompile Include="BI\Swappers.cpp" />
+    <ClCompile Include="BI\Tokenizers.cpp" />
+    <ClCompile Include="BI\ToString.cpp" />
     <ClCompile Include="Window.cpp" />
   </ItemGroup>
   <ItemGroup>

@@ -1,7 +1,5 @@
 #pragma once						// PLUGINDATA::hInstanceEXE <=> ::GetModuleHandle(nullptr)
 #define WIN32_LEAN_AND_MEAN			// PLUGINDATA::hInstanceDLL <=> ::GetModuleHandle(L"ByteInterpreter.dll")
-
-#include "pch.h"
 #include "AkelEdit.h"
 #include "AkelDLL.h"
 #include "PluginDialog.h"
