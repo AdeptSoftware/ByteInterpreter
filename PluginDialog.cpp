@@ -5,8 +5,10 @@
 
 const LPCWSTR	CLASS_NAME			= L"MainPluginDialog";
 const LONG		DLG_W				= 650;
-const LONG		DLG_H				= 133;
+const LONG		DLG_H				= 140;
+const LONG		CTRL_H_OFFSET		= 59;	// Смещение от верха окна до ближайшего контрола
 const UINT		NOMOVE_CTRL_COUNT	= 3;
+const int		GAP					= 3;
 
 const UINT		BUFFER_SIZE			= 32;
 
@@ -54,6 +56,7 @@ BOOL CPluginDialog::WndProc(HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM lParam) 
 		return TRUE;
 	}
 	m_cb_model.OnMessage(uMsg, wParam, lParam);
+	m_viewer.OnMessage(hWnd, uMsg, wParam, lParam);
 	if (uMsg == WM_CLOSE)
 		return !ShowWindow(SW_HIDE);
 	else if (uMsg == WM_SIZE)
@@ -70,21 +73,20 @@ BOOL CPluginDialog::WndProc(HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM lParam) 
 }
 
 void CPluginDialog::OnPaint(HDC hDC, RECT& rc) {
-	//int nWidth = m_img.GetDrawRect().right;
 	int nWidth = rc.right;
 	HFONT hOldFont = (HFONT)SelectObject(hDC, m_hFont);
 	COLORREF clrOldBackground = SetBkColor(hDC, RGB(255, 255, 255));
 	if(::IsWindowVisible(m_controls[ID_CB_COLOR_MODELS])) {
-		TextOutW(hDC, nWidth-175, -1, L"Width", 5);
-		TextOutW(hDC, nWidth-141, -1, L"Height", 6);
+		TextOutW(hDC, nWidth-GAP-172, -1, L"Width", 5);
+		TextOutW(hDC, nWidth-GAP-139, -1, L"Height", 6);
 	}
-	TextOutW(hDC, nWidth-107, -1, L"Stride", 6);
-	TextOutW(hDC, nWidth-73,  -1, L"Offset", 6);
-	TextOutW(hDC, nWidth-28,  -1, L"Skip",   4);
+	TextOutW(hDC, nWidth-GAP-105, -1, L"Stride", 6);
+	TextOutW(hDC, nWidth-GAP-70,  -1, L"Offset", 6);
+	TextOutW(hDC, nWidth-GAP-25,  -1, L"Skip",   4);
 	SetBkColor(hDC, clrOldBackground);
 	SelectObject(hDC, hOldFont);
 	// Составим изображение
-	//m_img.Draw(hDC);
+	m_viewer.Draw(hDC);
 }
 
 // ========= ========= ========= ========= ========= ========= ========= =========
@@ -117,7 +119,7 @@ POINT CPluginDialog::CalcWindowRect(LONG w, LONG h, LONG offsetRT) {
 
 HWND CPluginDialog::Create(HWND hWndParent, HICON hIcon) {
 	POINT p = CalcWindowRect(DLG_W, DLG_H, 40); // Ширина, высота окна и отступ от верхнего правого угла экрана
-	DWORD dwStyle = WS_SYSMENU | WS_BORDER | WS_THICKFRAME | WS_CAPTION; 
+	DWORD dwStyle = WS_SYSMENU | WS_BORDER | WS_THICKFRAME | WS_CAPTION | WS_MAXIMIZEBOX; 
 	m_data.hWnd = ::CreateWindowW(CLASS_NAME, L"", dwStyle, p.x, p.y, DLG_W, DLG_H, hWndParent, m_hMenu, m_data.hInst, nullptr);
 	if (!m_data.hWnd || !m_hMenu) {
 		MessageBox(nullptr, L"Window wasn't created!", CLASS_NAME, MB_OK);
@@ -131,7 +133,7 @@ HWND CPluginDialog::Create(HWND hWndParent, HICON hIcon) {
 
 BOOL CPluginDialog::CreateControls() {
 	HWND hColorModel = m_cb_model.Create(0, 0, 150, 200, m_data.hWnd, TVS_COMBOBOX_LIST | TVS_HASBUTTONS, ID_CB_COLOR_MODELS, ID_TREE_VIEW_CB);
-	m_controls.Create(  5, 7, 155, 200, WC_COMBOBOX, WS_VISIBLE | WS_CHILD | WS_VSCROLL | CBS_DROPDOWNLIST);							// ID_CB_DATA_TYPES
+	m_controls.Create(GAP, 7, 155, 200, WC_COMBOBOX, WS_VISIBLE | WS_CHILD | WS_VSCROLL | CBS_DROPDOWNLIST);							// ID_CB_DATA_TYPES
 	m_controls.Create(  0, 0,   0,   0, WC_EDIT,	 WS_VISIBLE | WS_CHILD | WS_BORDER | ES_AUTOVSCROLL | ES_MULTILINE | WS_VSCROLL);	// ID_EDIT_OUTPUT
 	m_controls.Create(163, 8,  65,  22, WC_BUTTON,	 WS_CHILD   | BS_AUTOCHECKBOX, L"unsigned");										// ID_BTN_EXTENDED
 	m_controls.Append(hColorModel);																										// ID_CB_COLOR_MODELS
@@ -188,12 +190,42 @@ void CPluginDialog::ShowColorControls() {
 	m_cb_model.ShowWindow(bShow);
 }
 
+void CPluginDialog::ShowImage(BOOL bShow) {
+	if (!m_bi.flags.bShowAsRGB)
+		return;
+	if (bShow)
+		m_converter.SetOutputViewer(&m_viewer);
+	else {
+		m_viewer.Clear();
+		m_converter.SetOutputViewer(nullptr);
+	}
+
+	RECT rc;
+	GetWindowRect(m_data.hWnd, &rc);
+	int nHeight = DLG_H;
+	if (bShow) {
+		int h = m_viewer.GetViewerRect().Height;
+		if (h <= 0)
+			h = DLG_H;
+		nHeight += h+GAP;
+	}
+	::SetWindowPos(m_data.hWnd, nullptr, 0, 0, rc.right-rc.left, nHeight, SWP_NOMOVE|SWP_NOZORDER);
+
+	if (bShow)
+		UpdateOutput(FALSE, FALSE);
+}
+
 void CPluginDialog::OnSizing(int w, int h) {
 	UINT uFlags = SWP_NOACTIVATE | SWP_NOZORDER;
-	int x[] = { w-332, w-179, w-143, w-103, w-82, w-31 };
+	int x[] = { w-GAP-329, w+GAP-182, w-GAP-140, w-GAP-100, w-GAP-79, w-GAP-28 };
 	for (UINT i = 0; i < m_controls.GetCount()-NOMOVE_CTRL_COUNT; i++)
 		SetWindowPos(m_controls.GetAt(i+NOMOVE_CTRL_COUNT), nullptr, x[i], (i == 0 ? 7 : 11), 0, 0, uFlags | SWP_NOSIZE);
-	SetWindowPos(m_controls[ID_EDIT_OUTPUT], nullptr, 5, 31, w-8, h-34, uFlags);
+	if (m_converter.HasViewer()) {
+		int y = DLG_H-CTRL_H_OFFSET;
+		m_viewer.SetViewerRect(GAP, y, w-GAP, h-y-GAP, ImageAlignment::CENTER);
+		h = y;
+	}
+	SetWindowPos(m_controls[ID_EDIT_OUTPUT], nullptr, GAP, 31, w-GAP-3, h-GAP-31, uFlags);
 	Invalidate(TRUE);
 }
 
@@ -250,17 +282,29 @@ void CPluginDialog::OnUpdateSettings(COLOR_CONVERTER_SETTINGS* pCSS) {
 	//m_bi.clr.converter.RGBA_SetBackgroundColor(reinterpret_cast<>(pCSS->bkg))
 }
 
-void CPluginDialog::UpdateOutput(BOOL bCheckKeyState) {
+void CPluginDialog::UpdateOutput(BOOL bCheckKeyState, BOOL bChangeMethod) {
 	if (bCheckKeyState && GetAsyncKeyState(VK_CONTROL))
 		return;
-	m_converter.ChangeMethods();
+
+	if (bChangeMethod)
+		m_converter.ChangeMethods();
 	m_converter.Read();
+	if (m_viewer.HasImage())
+		m_viewer.Invalidate(m_data.hWnd);
+}
+
+// Алгоритм всегда обеспечивает w*h >= cnt, где (w*h)-cnt = minimum
+void CPluginDialog::CalcImageSize(const ULONGLONG& cnt, UINT& w, UINT& h) {
+	double px = sqrt(ceil(cnt/m_converter.GetBytesPerColor()));
+	h = static_cast<size_t>(px);
+	if (fmod(px, 1.0) != 0.0)	w = static_cast<size_t>(round(px)+1.0);
+	else						w = h;
 }
 
 void CPluginDialog::SetBytes(BYTE* bytes, ULONG length, BOOL bIsWideChar) {
 	if (m_bi.bytes)
 		delete[] m_bi.bytes;
-
+	// Конвертируем строку в MultiByte
 	if (bIsWideChar) {
 		char* buf = new char[length];
 		wchar_t* ptr = reinterpret_cast<wchar_t*>(bytes); 
@@ -270,12 +314,18 @@ void CPluginDialog::SetBytes(BYTE* bytes, ULONG length, BOOL bIsWideChar) {
 	else
 		m_bi.bytes = bytes;
 	m_bi.uLength = length;
-	// Преобразуем байты
+	// Дополнительные настройки
 	if (m_bResetOffset) {
 		m_bi.uOffset = 0;
 		SetWindowText(m_controls[ID_EDIT_OFFSET], L"0");
 	}
-	m_converter.Read();
+	if (m_bi.img.bAutoSize) {
+		CalcImageSize(m_bi.uLength, m_bi.img.uWidth, m_bi.img.uHeight);
+		m_controls.FillNumberEdit(ID_EDIT_WIDTH,  L"%u", m_bi.img.uWidth);
+		m_controls.FillNumberEdit(ID_EDIT_HEIGHT, L"%u", m_bi.img.uHeight);
+	}
+	// Преобразуем байты
+	UpdateOutput(FALSE, FALSE);
 }
 
 #include "PluginDialog_Menu.inl"

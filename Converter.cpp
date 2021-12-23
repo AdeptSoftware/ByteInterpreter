@@ -36,6 +36,19 @@ void CConverter::UpdateProgressText() {
 	SetWindowTextW(m_hWndOutputProgress, m_data.szBuffer);
 }
 
+void CConverter::UpdateImage() {
+	if (m_pOutputViewer) {
+		m_pImage->SetPixel(m_pos.x++, m_pos.y,
+			Gdiplus::Color(static_cast<BYTE>(round(m_data.out[0].d*BYTEMAX)),
+						   static_cast<BYTE>(round(m_data.out[1].d*BYTEMAX)),
+						   static_cast<BYTE>(round(m_data.out[2].d*BYTEMAX))));
+		if (m_pos.x >= m_pOutputViewer->GetImageRect().Width) {
+			m_pos.x = 0;
+			m_pos.y++;
+		}
+	}
+}
+
 // ========= ========= ========= ========= ========= ========= ========= =========
 
 CConverter::CConverter(const ByteInterpreter::OPTIONS& bi) 
@@ -43,8 +56,24 @@ CConverter::CConverter(const ByteInterpreter::OPTIONS& bi)
 	m_szSeparator[0] = L'\0';
 }
 
-void CConverter::SetOutputText(HWND hWnd)		{ m_hWndOutputText	   = hWnd; }
-void CConverter::SetOutputProgress(HWND hWnd)	{ m_hWndOutputProgress = hWnd; }
+CConverter::~CConverter() {
+	// if (m_pImage) delete m_pImage;
+}
+
+void CConverter::SetOutputText(HWND hWnd)				{ m_hWndOutputText	   = hWnd; }
+void CConverter::SetOutputProgress(HWND hWnd)			{ m_hWndOutputProgress = hWnd; }
+void CConverter::SetOutputViewer(CImageViewer* pViewer)	{ m_pOutputViewer	   = pViewer; }
+
+BOOL CConverter::HasViewer() const {
+	return (m_pOutputViewer != nullptr);
+}
+
+double CConverter::GetBytesPerColor() {
+	double cnt = static_cast<double>(SZBYTE);
+	if (m_data.pBI->clr.bpp == BPPFormat::RGB565)
+		return 16.0/SZBYTE;
+	return (static_cast<double>(m_data.uValueSize)*m_data.uCount)/SZBYTE;
+}
 
 void CConverter::OnInitialize() {
 	if (m_data.pTokenizer->IsEmpty()) {
@@ -61,12 +90,23 @@ void CConverter::OnInitialize() {
 #endif // END BYTEINTERPRETER_BYTE2STRING
 }
 
+void CConverter::OnFirstIteration() {
+	if (m_pOutputViewer) {
+		if (m_pImage)
+			delete m_pImage;
+		m_pos = { 0, 0 };
+		m_pImage = new Gdiplus::Bitmap(m_data.pBI->img.uWidth, m_data.pBI->img.uHeight, PixelFormat24bppRGB);
+		m_pOutputViewer->SetImage(m_pImage);
+	}
+}
+
 void CConverter::OnIteration() {
 	m_szOutputText += m_data.szBuffer;
 	if (!m_data.pTokenizer->IsEmpty()) {
 		m_szOutputText += m_szSeparator;
 		UpdateProgressText();
 	}
+	UpdateImage();
 }
 
 void CConverter::OnEndOfBytes() {

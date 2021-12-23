@@ -62,8 +62,13 @@ void CPluginDialog::OnMenuCommand(UINT uID, BOOL arg) {
 	else if (uID == IDM_NEXT_DATA_TYPE) {}										// -
 	else if (uID == IDM_NEXT_COLOR_ENCODING) {}									// -
 	else if (uID == IDM_NEXT_VIEWMODE) {}										// -
-	else if (uID == IDM_RENDER2IMAGE) {											// -
+	else if (uID == IDM_RENDER2IMAGE) {
 		BOOL bChecked = InvertCheck(m_hMenu, uID);
+		if (bChecked) {
+			m_bi.flags.bShowAsRGB = TRUE;
+			CheckMenuItem(m_hMenu, IDM_SHOW_AS_RGB, MF_BYCOMMAND | MF_CHECKED);
+		}
+		ShowImage(bChecked);
 	}
 	else if (uID == IDM_RUN_OPENGL) {											// -
 		BOOL bChecked = InvertCheck(m_hMenu, uID);

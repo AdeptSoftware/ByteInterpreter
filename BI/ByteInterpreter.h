@@ -16,9 +16,10 @@ namespace ByteInterpreter {
 	protected:
 		void ReleaseMemory();
 
-		virtual void OnInitialize() = 0;
-		virtual void OnIteration()  = 0;
-		virtual void OnEndOfBytes() = 0;
+		virtual void OnInitialize()			= 0;
+		virtual void OnFirstIteration()		= 0;
+		virtual void OnIteration()			= 0;
+		virtual void OnEndOfBytes()			= 0;
 
 	protected:
 		CONVERSION_DATA		m_data;

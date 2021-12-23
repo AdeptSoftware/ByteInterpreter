@@ -55,6 +55,7 @@ void CAbstractByteInterpreter::Read() {
 	if (m_data.pBI->bytes) {
 		m_data.pTokenizer->SetBytes(m_data.pBI->bytes, m_data.pBI->uLength);
 		m_data.pTokenizer->SetPos(m_data.pBI->uOffset);
+		OnFirstIteration();
 		while (!m_data.pTokenizer->IsEmpty()) {
 			m_pSubsampling->Call();
 			if (m_data.pBI->uStride != 0)

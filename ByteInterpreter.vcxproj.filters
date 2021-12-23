@@ -129,6 +129,9 @@
     <ClInclude Include="Adapters.h">
       <Filter>ByteInterpreter\includes</Filter>
     </ClInclude>
+    <ClInclude Include="ImageViewer.h">
+      <Filter>Windows\includes</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="pch.cpp">
@@ -187,6 +190,9 @@
     </ClCompile>
     <ClCompile Include="BI\Adapters.cpp">
       <Filter>ByteInterpreter\sources</Filter>
+    </ClCompile>
+    <ClCompile Include="ImageViewer.cpp">
+      <Filter>Windows\sources</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

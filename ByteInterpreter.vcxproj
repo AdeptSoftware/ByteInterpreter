@@ -175,6 +175,7 @@
     <ClInclude Include="BI\Interfaces.h" />
     <ClInclude Include="exports.h" />
     <ClInclude Include="BI\ToRGB.h" />
+    <ClInclude Include="ImageViewer.h" />
     <ClInclude Include="PluginDialog.h" />
     <ClInclude Include="AkelDLL.h" />
     <ClInclude Include="AkelEdit.h" />
@@ -202,6 +203,7 @@
     <ClCompile Include="Debug.cpp" />
     <ClCompile Include="exports.cpp" />
     <ClCompile Include="BI\ToRGB.cpp" />
+    <ClCompile Include="ImageViewer.cpp" />
     <ClCompile Include="PluginDialog.cpp" />
     <ClCompile Include="dllmain.cpp" />
     <ClCompile Include="pch.cpp">

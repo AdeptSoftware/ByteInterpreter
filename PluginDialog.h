@@ -16,7 +16,7 @@ public:
 
 	// bytes - должны быть динамически выделены!
 	void SetBytes(BYTE* bytes, ULONG length, BOOL bIsWideChar = TRUE);
-	void UpdateOutput(BOOL bCheckKeyState = TRUE);
+	void UpdateOutput(BOOL bCheckKeyState = TRUE, BOOL bChangeMethod = TRUE);
 
 private:
 	// Расчет позиции окна, cмещенного от верхнего правого угла экрана
@@ -34,10 +34,16 @@ private:
 	void ShowDataControls();
 	void ShowColorControls();
 
+	void ShowImage(BOOL bShow);
+
+	// Алгоритм всегда обеспечивает w*h >= cnt, где (w*h)-cnt = minimum
+	void CalcImageSize(const ULONGLONG& cnt, UINT& w, UINT& h);
+
 private:
 	BI::OPTIONS		m_bi;
 	CSettingDialog	m_settings;
 	CConverter		m_converter;
+	CImageViewer	m_viewer;
 
 	CWndRegistrator m_wrPluginDialog;
 	CControlManager m_controls;
